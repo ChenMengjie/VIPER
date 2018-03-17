@@ -1,0 +1,3 @@
+importFrom(Rcpp, sourceCpp)
+useDynLib(VIPER)
+exportPattern("^[[:alpha:]]+")

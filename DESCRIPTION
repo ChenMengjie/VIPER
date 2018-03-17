@@ -1,0 +1,17 @@
+Package: VIPER
+Type: Package
+Title: VIPER: a variability-preserving imputation method for single cell RNA sequencing data
+Version: 0.1.1
+Author: Mengjie Chen, Xiang Zhou
+Maintainer: Mengjie Chen <mengjiechen@uchicago.edu>
+Description: The package implements a straightforward, accurate, free-of-tuning, and relatively computationally efficient scRNAseq imputation method, which we refer as Variability-Preserving Imputation for Accurate Gene Expression Recovery in Single Cell RNA Sequencing Studies (VIPER). VIPER borrows information across cells of similar expression pattern to impute the expression measurements in the cell of interest. However, unlike some of the previous cell-based methods, VIPER does not perform cell clustering before imputation nor uses only cells that belong to the same cell subpopulation for imputation. Instead, VIPER applies a weighted penalized regression model to actively select a sparse set of local neighborhood cells that are most predictive of the cell of interest. The selection of this sparse set of cells is done in a progressive manner and their associated imputation weights are estimated in the final inference step to ensure both robustness and computational scalability. In addition, VIPER explicitly accounts for expression measurement uncertainty of the zero values in scRNAseq by modeling the dropout probability in a cell-specific and gene-specific fashion. VIPER uses an efficient quadratic programing algorithm that infers all modeling parameters from the data at hand while keeping computational cost in check. 
+License: GPL (>=2)
+Encoding: UTF-8
+LazyData: true
+LinkingTo: Rcpp, RcppArmadillo
+Imports:
+    Rcpp,
+    RcppArmadillo,
+    quadprog,
+    glmnet
+RoxygenNote: 6.0.1
