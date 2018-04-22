@@ -53,7 +53,7 @@ VIPER <- function(gene.expression, num = 5000, percentage.cutoff = 0.1, minbool 
   outliers <- c(1:n)[outlier_flag]
 
   nopredict <- logxx
-  nopredict[gene.expression==0] <- res_impimputed[gene.expression==0]
+  nopredict[gene.expression==0] <- res_imp$imputed[gene.expression==0]
 
   imputed_counts <- round(exp(nopredict)-0.1)
 
@@ -62,7 +62,7 @@ VIPER <- function(gene.expression, num = 5000, percentage.cutoff = 0.1, minbool 
 
   res <- list(imputed = imputed_counts, imputed_log = nopredict,
               sample_weights = res_imp$sample_weights, outliers=outliers)
-  writel.table(res$imputed_counts, file = paste0(outdir, "/", prefix, "imputed_counts.csv"))
+  writel.table(imputed_counts, file = paste0(outdir, "/", prefix, "imputed_counts.csv"))
   writel.table(res$imputed_log, file = paste0(outdir, "/", prefix, "imputed_logvalue.csv"))
   writel.table(res$sample_weights, file = paste0(outdir, "/", prefix, "sample_weights.csv"))
   writel.table(res$outliers, file = paste0(outdir, "/", prefix, "outliers.csv"))
