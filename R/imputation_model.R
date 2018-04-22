@@ -44,12 +44,12 @@ VIPER <- function(gene.expression, num = 5000, percentage.cutoff = 0.1, minbool 
   selected_logxx <- logxx[flag, ]
 
 #  if(expectation == TRUE){
-#    res_imp <- imputation_by_samples_expectation(data, selected_logxx, logxx, zero.matrix, n, p, minbool, alpha)
+#  res_imp <- imputation_by_samples_expectation(data, selected_logxx, logxx, zero.matrix, n, p, minbool, alpha)
 #  } else {
-#    res_imp <- imputation_by_samples(data, selected_logxx, logxx, zero.matrix, n, p, minbool, alpha)
+    res_imp <- imputation_by_samples(data, selected_logxx, logxx, zero.matrix, n, p, minbool, alpha)
 #  }
 
-  outlier_flag <- apply(res_impsample_weights, 1, function(x){any(x==-1)})
+  outlier_flag <- apply(res_imp$sample_weights, 1, function(x){any(x==-1)})
   outliers <- c(1:n)[outlier_flag]
 
   nopredict <- logxx
@@ -61,11 +61,11 @@ VIPER <- function(gene.expression, num = 5000, percentage.cutoff = 0.1, minbool 
   rownames(imputed_counts) <- rownames(imputed_log) <- rownames(xx)
 
   res <- list(imputed = imputed_counts, imputed_log = nopredict,
-              sample_weights = res_impsample_weights, outliers=outliers)
-  writel.table(imputed_counts, file = paste0(outdir, "/", prefix, "imputed_counts.csv"))
-  writel.table(imputed_log, file = paste0(outdir, "/", prefix, "imputed_logvalue.csv"))
-  writel.table(sample_weights, file = paste0(outdir, "/", prefix, "sample_weights.csv"))
-  writel.table(outliers, file = paste0(outdir, "/", prefix, "outliers.csv"))
+              sample_weights = res_imp$sample_weights, outliers=outliers)
+  writel.table(res$imputed_counts, file = paste0(outdir, "/", prefix, "imputed_counts.csv"))
+  writel.table(res$imputed_log, file = paste0(outdir, "/", prefix, "imputed_logvalue.csv"))
+  writel.table(res$sample_weights, file = paste0(outdir, "/", prefix, "sample_weights.csv"))
+  writel.table(res$outliers, file = paste0(outdir, "/", prefix, "outliers.csv"))
 
   return(res)
 }
