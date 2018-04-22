@@ -57,8 +57,8 @@ VIPER <- function(gene.expression, num = 5000, percentage.cutoff = 0.1, minbool 
 
   imputed_counts <- round(exp(nopredict)-0.1)
 
-  colnames(imputed_counts) <- colnames(imputed_log) <- colnames(xx)
-  rownames(imputed_counts) <- rownames(imputed_log) <- rownames(xx)
+  colnames(imputed_counts) <- colnames(nopredict) <- colnames(xx)
+  rownames(imputed_counts) <- rownames(nopredict) <- rownames(xx)
 
   res <- list(imputed = imputed_counts, imputed_log = nopredict,
               sample_weights = res_imp$sample_weights, outliers=outliers)
