@@ -8,7 +8,7 @@ using namespace std;
 // [[Rcpp::export]]
 
 arma::vec calculate_weights(arma::vec z, arma::mat X){
-  Environment myEnv("package:SIMPLE");
+  Environment myEnv("package:VIPER");
   Function calculate_weights_fun = myEnv["calculate_weights"];
   Rcpp::NumericVector calculate_weights_res = wrap(calculate_weights_fun(z, X));
   return calculate_weights_res;
@@ -18,7 +18,7 @@ arma::vec calculate_weights(arma::vec z, arma::mat X){
 // [[Rcpp::export]]
 
 Rcpp::List fitting_lasso(arma::vec y, arma::mat X, bool min, double alpha){
-  Environment myEnv("package:SIMPLE");
+  Environment myEnv("package:VIPER");
   Function fitting_lasso_fun = myEnv["fitting_lasso"];
   if(min){
     Rcpp::List fitting_lasso_res = wrap(fitting_lasso_fun(y, X, "min", alpha));
