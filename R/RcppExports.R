@@ -2,38 +2,78 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 calculate_weights <- function(z, X) {
-    .Call('VIPER_calculate_weights', PACKAGE = 'VIPER', z, X)
+    .Call('_VIPER_calculate_weights', PACKAGE = 'VIPER', z, X)
 }
 
 fitting_lasso <- function(y, X, min, alpha) {
-    .Call('VIPER_fitting_lasso', PACKAGE = 'VIPER', y, X, min, alpha)
+    .Call('_VIPER_fitting_lasso', PACKAGE = 'VIPER', y, X, min, alpha)
 }
 
 log_factorial <- function(Y) {
-    .Call('VIPER_log_factorial', PACKAGE = 'VIPER', Y)
+    .Call('_VIPER_log_factorial', PACKAGE = 'VIPER', Y)
 }
 
 log_factorial_calculated <- function(N) {
-    .Call('VIPER_log_factorial_calculated', PACKAGE = 'VIPER', N)
+    .Call('_VIPER_log_factorial_calculated', PACKAGE = 'VIPER', N)
 }
 
-reweighting_sum_C <- function(Ymat, Yflagmat, Y, Yflag, prior_weight, ImputeAll) {
-    .Call('VIPER_reweighting_sum_C', PACKAGE = 'VIPER', Ymat, Yflagmat, Y, Yflag, prior_weight, ImputeAll)
+alpha_optim <- function(val) {
+    .Call('_VIPER_alpha_optim', PACKAGE = 'VIPER', val)
 }
 
-reweighting_C <- function(Ymat, Yflagmat, Y, Yflag) {
-    .Call('VIPER_reweighting_C', PACKAGE = 'VIPER', Ymat, Yflagmat, Y, Yflag)
+log_poisson_likelihood_mix <- function(Y, psi, mu, n, log_factorial_Y) {
+    .Call('_VIPER_log_poisson_likelihood_mix', PACKAGE = 'VIPER', Y, psi, mu, n, log_factorial_Y)
 }
 
-imputation_by_samples <- function(data, selected_logxx, logxx, zero_matrix, n, p, minbool, alpha) {
-    .Call('VIPER_imputation_by_samples', PACKAGE = 'VIPER', data, selected_logxx, logxx, zero_matrix, n, p, minbool, alpha)
+gradient_all_mix <- function(Y, psi, mu, posterior_y, n1) {
+    .Call('_VIPER_gradient_all_mix', PACKAGE = 'VIPER', Y, psi, mu, posterior_y, n1)
 }
 
-replacing_by_expectation_C <- function(Ymat, Yflagmat, Y, Yflag, Ymat_sub, Yflagmat_sub, prior_weight, ImputeAll) {
-    .Call('VIPER_replacing_by_expectation_C', PACKAGE = 'VIPER', Ymat, Yflagmat, Y, Yflag, Ymat_sub, Yflagmat_sub, prior_weight, ImputeAll)
+gradient_all_combined_mix <- function(Y, psi, mu, posterior1, n1) {
+    .Call('_VIPER_gradient_all_combined_mix', PACKAGE = 'VIPER', Y, psi, mu, posterior1, n1)
 }
 
-imputation_by_samples_expectation <- function(data, selected_logxx, logxx, zero_matrix, n, p, minbool, alpha) {
-    .Call('VIPER_imputation_by_samples_expectation', PACKAGE = 'VIPER', data, selected_logxx, logxx, zero_matrix, n, p, minbool, alpha)
+test_stepsize_for_psi_mix <- function(Y, gra_psi, ll, psi, mu, n1, gamma, down, log_factorial_Y) {
+    .Call('_VIPER_test_stepsize_for_psi_mix', PACKAGE = 'VIPER', Y, gra_psi, ll, psi, mu, n1, gamma, down, log_factorial_Y)
+}
+
+test_stepsize_for_mu_mix <- function(Y, gra_mu, ll, psi, mu, n1, gamma, down, log_factorial_Y) {
+    .Call('_VIPER_test_stepsize_for_mu_mix', PACKAGE = 'VIPER', Y, gra_mu, ll, psi, mu, n1, gamma, down, log_factorial_Y)
+}
+
+gradient_descent_mix <- function(Y, n1, mixing_weights_Y, posterior_Y, psi, mu, log_factorial_Y, steps, gamma, down) {
+    .Call('_VIPER_gradient_descent_mix', PACKAGE = 'VIPER', Y, n1, mixing_weights_Y, posterior_Y, psi, mu, log_factorial_Y, steps, gamma, down)
+}
+
+take_exp_weight <- function(x) {
+    .Call('_VIPER_take_exp_weight', PACKAGE = 'VIPER', x)
+}
+
+EM_discrete_mix <- function(Y, steps, iter, gamma, down, cutoff) {
+    .Call('_VIPER_EM_discrete_mix', PACKAGE = 'VIPER', Y, steps, iter, gamma, down, cutoff)
+}
+
+gradient_descent_mix_easy <- function(Y, n1, mixing_weights_Y, posterior_Y, psi, mu, log_factorial_Y, steps, down) {
+    .Call('_VIPER_gradient_descent_mix_easy', PACKAGE = 'VIPER', Y, n1, mixing_weights_Y, posterior_Y, psi, mu, log_factorial_Y, steps, down)
+}
+
+EM_discrete_mix_easy <- function(Y, steps, iter, down, cutoff) {
+    .Call('_VIPER_EM_discrete_mix_easy', PACKAGE = 'VIPER', Y, steps, iter, down, cutoff)
+}
+
+reweighting_sum_new_posterior_expectation_C <- function(Ymat, Yflagmat, Ycountmat, Y, Yflag, prior_weight) {
+    .Call('_VIPER_reweighting_sum_new_posterior_expectation_C', PACKAGE = 'VIPER', Ymat, Yflagmat, Ycountmat, Y, Yflag, prior_weight)
+}
+
+reweighting_sum_new_posterior_expectation_simplified_C <- function(Ymat, Yflagmat, Ycountmat, Y, Yflag, prior_weight) {
+    .Call('_VIPER_reweighting_sum_new_posterior_expectation_simplified_C', PACKAGE = 'VIPER', Ymat, Yflagmat, Ycountmat, Y, Yflag, prior_weight)
+}
+
+imputation_by_samples_posterior_expectation <- function(data, selected_logxx, logxx, zero_matrix, xx, n, p, minbool, alpha) {
+    .Call('_VIPER_imputation_by_samples_posterior_expectation', PACKAGE = 'VIPER', data, selected_logxx, logxx, zero_matrix, xx, n, p, minbool, alpha)
+}
+
+imputation_by_samples_posterior_expectation_simplified <- function(data, selected_logxx, logxx, zero_matrix, xx, n, p, minbool, alpha) {
+    .Call('_VIPER_imputation_by_samples_posterior_expectation_simplified', PACKAGE = 'VIPER', data, selected_logxx, logxx, zero_matrix, xx, n, p, minbool, alpha)
 }
 

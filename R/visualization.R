@@ -1,5 +1,5 @@
 PlotWeights <- function(Imputed, KnownLabel = NULL){
-
+  suppressMessages(require(easyGgplot2))
   suppressMessages(require(gplots))
   weights.mat <- apply(Imputed$sample_weights, 2, function(x){
     y <- x
@@ -30,44 +30,80 @@ PlotGeneMatrix <- function(Imputed, GeneExpression = NULL, KnownLabel = NULL, Ge
 
   suppressMessages(require(grid))
 
-  require(gplots)
-  require(gridExtra)
+  suppressMessages(require(gplots))
+  suppressMessages(require(gridExtra))
+  suppressMessages(require(gridGraphics))
 
+  GeneExpression_log <- apply(GeneExpression, 2, function(x){log(x+0.1)})
   Imputed_log <- Imputed$imputed_log
 
   p <- nrow(Imputed$imputed_log)
   if(p > GeneNum){
-    selected <- round(runif(2500)*p)
+    #gene.var <- apply(GeneExpression_log, 1, var)
+    #cutoff <- sort(gene.var, decreasing = TRUE)[GeneNum]
+    #fll <- c(1:p)[gene.var >= cutoff]
+    selected <- round(runif(GeneNum)*p)
     fll <- c(1:p)[selected]
   } else {
     fll <- c(1:p)
   }
   palette.gr.marray <- colorRampPalette(c("blue", "white", "red"))(56)
 
+  grab_grob <- function(){
+    grid.grab()
+  }
+
   if(!is.null(GeneExpression)){
     if(!is.null(KnownLabel)){
 
       colorlist <- c("turquoise4", "cyan", "lavender",  "gold", "slateblue1", "violet", "skyblue1", "khaki", "pink", "salmon", "limegreen", "chocolate", "maroon", "purple", "blue", "yellow", "red",  "brown", '#FFAAD4', '#00CC00', '#66B2FF', '#B266FF', '#FFD4AA', '#AAFFD4', '#CC0000', "#B266CC")
       col.color <- colorlist[as.numeric(as.factor(KnownLabel))]
-      aa <- heatmap.2(as.matrix(GeneExpression[fll, ]), trace = "none", col = palette.gr.marray,
-                  symbreaks = T, labCol = NA, dendrogram = "none", ColSideColors = col.color,
-                  labRow = NA, key = T, Colv = FALSE, Rowv = TRUE)
+
+      aa <- heatmap.2(as.matrix(GeneExpression_log[fll, ]), trace = "none", col = palette.gr.marray,
+                      symbreaks = T, labCol = NA, dendrogram = "none", ColSideColors = col.color,
+                      labRow = NA, key = T, Colv = FALSE, Rowv = TRUE)
+
       bb <- rev(aa$rowInd)
-      cc <- heatmap.2(as.matrix(Imputed_log[fll, ][bb, ]), trace = "none", col = palette.gr.marray,
-                symbreaks = T, labCol = NA, dendrogram = "none", ColSideColors = col.color,
-                labRow = NA, key = T, Colv = FALSE, Rowv = FALSE)
+
+      draw_H1 <- function(data){
+        heatmap.2(as.matrix(data), trace = "none", col = palette.gr.marray,
+                  symbreaks = T, labCol = NA, dendrogram = "none", ColSideColors = col.color,
+                  labRow = NA, key = T, Colv = FALSE, Rowv = FALSE)
+        grab_grob()
+      }
+
+      kk1 <- draw_H1(GeneExpression_log[fll, ][bb, ])
+      kk2 <- draw_H1(Imputed_log[fll, ][bb, ])
+
+
+      gl <- list(kk1, kk2)
+
+      grid.newpage()
+      grid.arrange(grobs=gl, ncol=2, clip=TRUE)
 
     } else {
+
+      bb <- rev(aa$rowInd)
+
       aa <- heatmap.2(as.matrix(GeneExpression[fll, ]), trace = "none", col = palette.gr.marray,
                       symbreaks = T, labCol = NA, dendrogram = "none", labRow = NA, key = T, Colv = FALSE, Rowv = TRUE)
-      bb <- rev(aa$rowInd)
-      cc <- heatmap.2(as.matrix(Imputed_log[fll, ][bb, ]), trace = "none", col = palette.gr.marray,
-                symbreaks = T, labCol = NA, dendrogram = "none", labRow = NA, key = T, Colv = FALSE, Rowv = FALSE)
-      gl <- list(aa, cc)
 
-      grab_grob <- function(){
-        grid.grab()
+
+      draw_H1 <- function(data){
+        heatmap.2(as.matrix(data), trace = "none", col = palette.gr.marray,
+                  symbreaks = T, labCol = NA, dendrogram = "none", ColSideColors = col.color,
+                  labRow = NA, key = T, Colv = FALSE, Rowv = FALSE)
+        grab_grob()
       }
+
+      kk1 <- draw_H1(GeneExpression_log[fll, ][bb, ])
+      kk2 <- draw_H1(Imputed_log[fll, ][bb, ])
+
+
+      gl <- list(kk1, kk2)
+
+      grid.newpage()
+      grid.arrange(grobs=gl, ncol=2, clip=TRUE)
 
     }
   } else {
@@ -76,9 +112,8 @@ PlotGeneMatrix <- function(Imputed, GeneExpression = NULL, KnownLabel = NULL, Ge
 
       colorlist <- c("turquoise4", "cyan", "lavender",  "gold", "slateblue1", "violet", "skyblue1", "khaki", "pink", "salmon", "limegreen", "chocolate", "maroon", "purple", "blue", "yellow", "red",  "brown", '#FFAAD4', '#00CC00', '#66B2FF', '#B266FF', '#FFD4AA', '#AAFFD4', '#CC0000', "#B266CC")
       col.color <- colorlist[as.numeric(as.factor(KnownLabel))]
-      eatmap.2(as.matrix(Imputed_log[fll, ]), trace = "none", col = palette.gr.marray,
-                symbreaks = T, labCol = NA, dendrogram = "none", ColSideColors = col.color,
-                labRow = NA, key = T, Colv = FALSE, Rowv = TRUE)
+      heatmap.2(as.matrix(Imputed_log[fll, ]), trace = "none", col = palette.gr.marray,
+                symbreaks = T, labCol = NA, dendrogram = "none", ColSideColors = col.color, labRow = NA, key = T, Colv = FALSE, Rowv = TRUE)
     } else {
       heatmap.2(as.matrix(Imputed_log[fll, ]), trace = "none", col = palette.gr.marray,
                 symbreaks = T, labCol = NA, dendrogram = "none", labRow = NA, key = T, Colv = FALSE, Rowv = TRUE)
@@ -89,12 +124,13 @@ PlotGeneMatrix <- function(Imputed, GeneExpression = NULL, KnownLabel = NULL, Ge
 
 }
 
-PlotCV <- function(Imputed, GeneExpression, KnownLabel = NULL, GeneNum = 2000){
+PlotCV <- function(Imputed, GeneExpression, KnownLabel = NULL, GeneNum = 2000, selection = c("Zero", "Mean")){
 
-  require(gplots)
+  selection <- match.arg(selection )
+  suppressMessages(require(gplots))
 
-  logxx <- apply(gene.expression, 2, function(y){log(y + 1)})
-  logxx[gene.expression==0] <- 0
+  logxx <- apply(GeneExpression, 2, function(y){log(y + 0.1)})
+  logxx[GeneExpression==0] <- 0
 
   Imputed_log <- Imputed$imputed_log
 
@@ -118,31 +154,34 @@ PlotCV <- function(Imputed, GeneExpression, KnownLabel = NULL, GeneNum = 2000){
     CV.per.gene
   }
 
-  types <- unique(KnownLabel)
-  len <- length(types)
-  show.some <- sample(1:nrow(GeneExpression), GeneNum)
+  if(!is.null(KnownLabel)){
 
-  for(i in 1:len){
+    types <- unique(KnownLabel)
+    len <- length(types)
+    show.some <- sample(1:nrow(GeneExpression), GeneNum)
 
-    flag <- which(KnownLabel%in%types[i])
-    raw.data <- logxx[, flag]
-    zero.num <- apply(raw.data, 1, function(x){
-      length(x[x==0])
-    })
-    zero.rate <- round(zero.num/ncol(logxx), 2)*100
-    dropout.rate <- apply(raw.data, 1, function(x){
-      round(mean(x[x!=0]), 2)
-    })
+    for(i in 1:len){
 
-    SIMPLE.CV <- CV.all(Imputed_log[, flag])[show.some]
-    raw.cv <- CV.nonzero(logxx[, flag])[show.some]
-    zero.rate.selected <- zero.rate[show.some]
-    dropout.rate.selected <- dropout.rate[show.some]
+      flag <- which(KnownLabel%in%types[i])
+      raw.data <- logxx[, flag]
+      zero.num <- apply(raw.data, 1, function(x){
+        length(x[x==0])
+      })
+      zero.rate <- round(zero.num/ncol(logxx), 2)*100
+        dropout.rate <- apply(raw.data, 1, function(x){
+        round(mean(x[x!=0]), 2)
+      })
 
-    df <- data.frame(value = SIMPLE.CV, compr = rep("Without-imputation", GeneNum), raw = raw.cv, zero = zero.rate.selected,
+      SIMPLE.CV <- CV.all(Imputed_log[, flag])[show.some]
+      raw.cv <- CV.nonzero(logxx[, flag])[show.some]
+      zero.rate.selected <- zero.rate[show.some]
+      dropout.rate.selected <- dropout.rate[show.some]
+
+      df <- data.frame(value = SIMPLE.CV, compr = rep("Without-imputation", GeneNum), raw = raw.cv, zero = zero.rate.selected,
                      dropout = dropout.rate.selected)
 
-    gg1 <- ggplot2.scatterplot(data = df, xName = 'raw', yName = 'value', size = 0.2,
+      if(selection=="Zero"){
+      gg1 <- ggplot2.scatterplot(data = df, xName = 'raw', yName = 'value', size = 0.5,
               backgroundColor = "white", xtitle="CV (Before Imputation)", ytitle="CV (After Imputation)",
                mainTitle = types[i], removePanelGrid=TRUE, removePanelBorder=FALSE, showLegend=TRUE,
               legendTitle = "Percentage \n of Zero", legendTitleFont = c(15, "bold", "black"),
@@ -150,18 +189,60 @@ PlotCV <- function(Imputed, GeneExpression, KnownLabel = NULL, GeneNum = 2000){
               xtitleFont = c(15, "bold", "black"),  ytitleFont = c(15, "bold", "black"),
               xTickLabelFont = c(15, "bold", "white"), yTickLabelFont = c(15, "bold", "black")) + geom_point(aes(colour = zero), size = 0.2) + ylim(0, 5) + xlim(0, 5) + theme(strip.text.x = element_text(size = 15,
               colour = "black", face = "bold")) + geom_abline(col = "brown", linetype = "dashed", size=1)
-
-    gg2 <- ggplot2.scatterplot(data = df, xName = 'raw', yName = 'value', size = 0.2,
+      print(gg1)
+      } else {
+      gg2 <- ggplot2.scatterplot(data = df, xName = 'raw', yName = 'value', size = 0.5,
            backgroundColor = "white", xtitle="CV (Before Imputation)", ytitle="CV (After Imputation)",
            mainTitle = types[i], removePanelGrid=TRUE, removePanelBorder=FALSE, showLegend=TRUE,
            legendTitle = "Mean of nonzero \n values", legendTitleFont = c(15, "bold", "black"),
            legendTextFont = c(15, "bold", "black"), mainTitleFont = c(10, "bold", "black"),
            xtitleFont = c(15, "bold", "black"),  ytitleFont = c(15, "bold", "black"),
-            xTickLabelFont = c(15, "bold", "white"), yTickLabelFont = c(15, "bold", "black")) + geom_point(aes(colour = dropout), size = 0.2) + ylim(0, 5) + xlim(0, 5)  + theme(strip.text.x = element_text(size = 15,colour = "black", face = "bold")) + geom_abline(col = "brown", linetype = "dashed", size=1)
-    multiplot(gg1, gg2, cols=2)
+            xTickLabelFont = c(15, "bold", "white"), yTickLabelFont = c(15, "bold", "black")) + geom_point(aes(colour = dropout), size = 0.2) + ylim(0, 5) + xlim(0, 5) + theme(strip.text.x = element_text(size = 15,colour = "black", face = "bold")) + geom_abline(col = "brown", linetype = "dashed", size=1)
+      print(gg2)
+      }
+    }
+
+    } else {
+
+      show.some <- sample(1:nrow(GeneExpression), GeneNum)
+      raw.data <- logxx
+      zero.num <- apply(raw.data, 1, function(x){
+        length(x[x==0])
+      })
+      zero.rate <- round(zero.num/ncol(logxx), 2)*100
+      dropout.rate <- apply(raw.data, 1, function(x){
+        round(mean(x[x!=0]), 2)
+      })
+
+      SIMPLE.CV <- CV.all(Imputed_log)[show.some]
+      raw.cv <- CV.nonzero(logxx)[show.some]
+      zero.rate.selected <- zero.rate[show.some]
+      dropout.rate.selected <- dropout.rate[show.some]
+
+      df <- data.frame(value = SIMPLE.CV, compr = rep("Without-imputation", GeneNum), raw = raw.cv, zero = zero.rate.selected,
+                       dropout = dropout.rate.selected)
+      if(selection=="Zero"){
+      gg1 <- ggplot2.scatterplot(data = df, xName = 'raw', yName = 'value', size = 0.2,
+                                 backgroundColor = "white", xtitle="CV (Before Imputation)", ytitle="CV (After Imputation)",
+                                 removePanelGrid=TRUE, removePanelBorder=FALSE, showLegend=TRUE,
+                                 legendTitle = "Percentage \n of Zero", legendTitleFont = c(15, "bold", "black"),
+                                 legendTextFont = c(15, "bold", "black"), mainTitleFont = c(10, "bold", "black"),
+                                 xtitleFont = c(15, "bold", "black"),  ytitleFont = c(15, "bold", "black"),
+                                 xTickLabelFont = c(15, "bold", "white"), yTickLabelFont = c(15, "bold", "black")) + geom_point(aes(colour = zero), size = 0.2) + ylim(0, 5) + xlim(0, 5) + theme(strip.text.x = element_text(size = 15,
+                                                                                                                                                                                                                              colour = "black", face = "bold")) + geom_abline(col = "brown", linetype = "dashed", size=1)
+      print(gg1)
+      } else {
+      gg2 <- ggplot2.scatterplot(data = df, xName = 'raw', yName = 'value', size = 0.2,
+                                 backgroundColor = "white", xtitle="CV (Before Imputation)", ytitle="CV (After Imputation)",
+                                 removePanelGrid=TRUE, removePanelBorder=FALSE, showLegend=TRUE,
+                                 legendTitle = "Mean of nonzero \n values", legendTitleFont = c(15, "bold", "black"),
+                                 legendTextFont = c(15, "bold", "black"), mainTitleFont = c(10, "bold", "black"),
+                                 xtitleFont = c(15, "bold", "black"),  ytitleFont = c(15, "bold", "black"),
+                                 xTickLabelFont = c(15, "bold", "white"), yTickLabelFont = c(15, "bold", "black")) + geom_point(aes(colour = dropout), size = 0.2) + ylim(0, 5) + xlim(0, 5) + theme(strip.text.x = element_text(size = 15,colour = "black", face = "bold")) + geom_abline(col = "brown", linetype = "dashed", size=1)
+      print(gg2)
+      }
 
   }
-
 
 }
 

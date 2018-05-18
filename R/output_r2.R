@@ -1,6 +1,6 @@
 fitting_lasso_return_r2 <- function(y, X, alpha = 1){
 
-  require(glmnet)
+  suppressMessages(require(glmnet))
   cv.lasso <- cv.glmnet(X, y, intercept = FALSE, alpha = alpha)
   r2 <- cv.lasso$glmnet.fit$dev.ratio[which(cv.lasso$glmnet.fit$lambda == cv.lasso$lambda.min)]
   coeff <- as.vector(coef(cv.lasso, s = cv.lasso$lambda.min))
@@ -150,7 +150,7 @@ PredictGene <- function(GeneExpression, GeneNum = 1000, CellNum = NULL, ZeroRate
 }
 
 PlotR2 <- function(r2CellSummary, r2GeneSummary = NULL, DatasetName = NULL, r2type = c("r2adj", "r2", "r2lasso")){
-
+  suppressMessages(require(easyGgplot2))
   r2type <- match.arg(r2type)
 
   require(ggplot2)

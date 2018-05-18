@@ -8,7 +8,7 @@ using namespace Rcpp;
 
 // calculate_weights
 arma::vec calculate_weights(arma::vec z, arma::mat X);
-RcppExport SEXP VIPER_calculate_weights(SEXP zSEXP, SEXP XSEXP) {
+RcppExport SEXP _VIPER_calculate_weights(SEXP zSEXP, SEXP XSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -20,7 +20,7 @@ END_RCPP
 }
 // fitting_lasso
 Rcpp::List fitting_lasso(arma::vec y, arma::mat X, bool min, double alpha);
-RcppExport SEXP VIPER_fitting_lasso(SEXP ySEXP, SEXP XSEXP, SEXP minSEXP, SEXP alphaSEXP) {
+RcppExport SEXP _VIPER_fitting_lasso(SEXP ySEXP, SEXP XSEXP, SEXP minSEXP, SEXP alphaSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -34,7 +34,7 @@ END_RCPP
 }
 // log_factorial
 double log_factorial(int Y);
-RcppExport SEXP VIPER_log_factorial(SEXP YSEXP) {
+RcppExport SEXP _VIPER_log_factorial(SEXP YSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -45,7 +45,7 @@ END_RCPP
 }
 // log_factorial_calculated
 arma::vec log_factorial_calculated(int N);
-RcppExport SEXP VIPER_log_factorial_calculated(SEXP NSEXP) {
+RcppExport SEXP _VIPER_log_factorial_calculated(SEXP NSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -54,39 +54,216 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// reweighting_sum_C
-arma::vec reweighting_sum_C(arma::mat Ymat, arma::mat Yflagmat, arma::vec Y, arma::vec Yflag, arma::vec prior_weight, bool ImputeAll);
-RcppExport SEXP VIPER_reweighting_sum_C(SEXP YmatSEXP, SEXP YflagmatSEXP, SEXP YSEXP, SEXP YflagSEXP, SEXP prior_weightSEXP, SEXP ImputeAllSEXP) {
+// alpha_optim
+double alpha_optim(double val);
+RcppExport SEXP _VIPER_alpha_optim(SEXP valSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type val(valSEXP);
+    rcpp_result_gen = Rcpp::wrap(alpha_optim(val));
+    return rcpp_result_gen;
+END_RCPP
+}
+// log_poisson_likelihood_mix
+arma::vec log_poisson_likelihood_mix(arma::vec Y, double psi, double mu, int n, arma::vec log_factorial_Y);
+RcppExport SEXP _VIPER_log_poisson_likelihood_mix(SEXP YSEXP, SEXP psiSEXP, SEXP muSEXP, SEXP nSEXP, SEXP log_factorial_YSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< double >::type psi(psiSEXP);
+    Rcpp::traits::input_parameter< double >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type log_factorial_Y(log_factorial_YSEXP);
+    rcpp_result_gen = Rcpp::wrap(log_poisson_likelihood_mix(Y, psi, mu, n, log_factorial_Y));
+    return rcpp_result_gen;
+END_RCPP
+}
+// gradient_all_mix
+arma::vec gradient_all_mix(arma::vec Y, double psi, double mu, arma::vec posterior_y, int n1);
+RcppExport SEXP _VIPER_gradient_all_mix(SEXP YSEXP, SEXP psiSEXP, SEXP muSEXP, SEXP posterior_ySEXP, SEXP n1SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< double >::type psi(psiSEXP);
+    Rcpp::traits::input_parameter< double >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type posterior_y(posterior_ySEXP);
+    Rcpp::traits::input_parameter< int >::type n1(n1SEXP);
+    rcpp_result_gen = Rcpp::wrap(gradient_all_mix(Y, psi, mu, posterior_y, n1));
+    return rcpp_result_gen;
+END_RCPP
+}
+// gradient_all_combined_mix
+arma::vec gradient_all_combined_mix(arma::vec Y, double psi, double mu, arma::vec posterior1, int n1);
+RcppExport SEXP _VIPER_gradient_all_combined_mix(SEXP YSEXP, SEXP psiSEXP, SEXP muSEXP, SEXP posterior1SEXP, SEXP n1SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< double >::type psi(psiSEXP);
+    Rcpp::traits::input_parameter< double >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type posterior1(posterior1SEXP);
+    Rcpp::traits::input_parameter< int >::type n1(n1SEXP);
+    rcpp_result_gen = Rcpp::wrap(gradient_all_combined_mix(Y, psi, mu, posterior1, n1));
+    return rcpp_result_gen;
+END_RCPP
+}
+// test_stepsize_for_psi_mix
+double test_stepsize_for_psi_mix(arma::vec Y, double gra_psi, double ll, double psi, double mu, int n1, double gamma, double down, arma::vec log_factorial_Y);
+RcppExport SEXP _VIPER_test_stepsize_for_psi_mix(SEXP YSEXP, SEXP gra_psiSEXP, SEXP llSEXP, SEXP psiSEXP, SEXP muSEXP, SEXP n1SEXP, SEXP gammaSEXP, SEXP downSEXP, SEXP log_factorial_YSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< double >::type gra_psi(gra_psiSEXP);
+    Rcpp::traits::input_parameter< double >::type ll(llSEXP);
+    Rcpp::traits::input_parameter< double >::type psi(psiSEXP);
+    Rcpp::traits::input_parameter< double >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< int >::type n1(n1SEXP);
+    Rcpp::traits::input_parameter< double >::type gamma(gammaSEXP);
+    Rcpp::traits::input_parameter< double >::type down(downSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type log_factorial_Y(log_factorial_YSEXP);
+    rcpp_result_gen = Rcpp::wrap(test_stepsize_for_psi_mix(Y, gra_psi, ll, psi, mu, n1, gamma, down, log_factorial_Y));
+    return rcpp_result_gen;
+END_RCPP
+}
+// test_stepsize_for_mu_mix
+double test_stepsize_for_mu_mix(arma::vec Y, double gra_mu, double ll, double psi, double mu, int n1, double gamma, double down, arma::vec log_factorial_Y);
+RcppExport SEXP _VIPER_test_stepsize_for_mu_mix(SEXP YSEXP, SEXP gra_muSEXP, SEXP llSEXP, SEXP psiSEXP, SEXP muSEXP, SEXP n1SEXP, SEXP gammaSEXP, SEXP downSEXP, SEXP log_factorial_YSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< double >::type gra_mu(gra_muSEXP);
+    Rcpp::traits::input_parameter< double >::type ll(llSEXP);
+    Rcpp::traits::input_parameter< double >::type psi(psiSEXP);
+    Rcpp::traits::input_parameter< double >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< int >::type n1(n1SEXP);
+    Rcpp::traits::input_parameter< double >::type gamma(gammaSEXP);
+    Rcpp::traits::input_parameter< double >::type down(downSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type log_factorial_Y(log_factorial_YSEXP);
+    rcpp_result_gen = Rcpp::wrap(test_stepsize_for_mu_mix(Y, gra_mu, ll, psi, mu, n1, gamma, down, log_factorial_Y));
+    return rcpp_result_gen;
+END_RCPP
+}
+// gradient_descent_mix
+arma::vec gradient_descent_mix(arma::vec Y, int n1, arma::vec mixing_weights_Y, arma::mat posterior_Y, double psi, double mu, arma::vec log_factorial_Y, int steps, double gamma, double down);
+RcppExport SEXP _VIPER_gradient_descent_mix(SEXP YSEXP, SEXP n1SEXP, SEXP mixing_weights_YSEXP, SEXP posterior_YSEXP, SEXP psiSEXP, SEXP muSEXP, SEXP log_factorial_YSEXP, SEXP stepsSEXP, SEXP gammaSEXP, SEXP downSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< int >::type n1(n1SEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type mixing_weights_Y(mixing_weights_YSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type posterior_Y(posterior_YSEXP);
+    Rcpp::traits::input_parameter< double >::type psi(psiSEXP);
+    Rcpp::traits::input_parameter< double >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type log_factorial_Y(log_factorial_YSEXP);
+    Rcpp::traits::input_parameter< int >::type steps(stepsSEXP);
+    Rcpp::traits::input_parameter< double >::type gamma(gammaSEXP);
+    Rcpp::traits::input_parameter< double >::type down(downSEXP);
+    rcpp_result_gen = Rcpp::wrap(gradient_descent_mix(Y, n1, mixing_weights_Y, posterior_Y, psi, mu, log_factorial_Y, steps, gamma, down));
+    return rcpp_result_gen;
+END_RCPP
+}
+// take_exp_weight
+arma::rowvec take_exp_weight(arma::rowvec x);
+RcppExport SEXP _VIPER_take_exp_weight(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::rowvec >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(take_exp_weight(x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// EM_discrete_mix
+Rcpp::List EM_discrete_mix(arma::vec Y, int steps, int iter, double gamma, double down, double cutoff);
+RcppExport SEXP _VIPER_EM_discrete_mix(SEXP YSEXP, SEXP stepsSEXP, SEXP iterSEXP, SEXP gammaSEXP, SEXP downSEXP, SEXP cutoffSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< int >::type steps(stepsSEXP);
+    Rcpp::traits::input_parameter< int >::type iter(iterSEXP);
+    Rcpp::traits::input_parameter< double >::type gamma(gammaSEXP);
+    Rcpp::traits::input_parameter< double >::type down(downSEXP);
+    Rcpp::traits::input_parameter< double >::type cutoff(cutoffSEXP);
+    rcpp_result_gen = Rcpp::wrap(EM_discrete_mix(Y, steps, iter, gamma, down, cutoff));
+    return rcpp_result_gen;
+END_RCPP
+}
+// gradient_descent_mix_easy
+arma::vec gradient_descent_mix_easy(arma::vec Y, int n1, arma::vec mixing_weights_Y, arma::mat posterior_Y, double psi, double mu, arma::vec log_factorial_Y, int steps, double down);
+RcppExport SEXP _VIPER_gradient_descent_mix_easy(SEXP YSEXP, SEXP n1SEXP, SEXP mixing_weights_YSEXP, SEXP posterior_YSEXP, SEXP psiSEXP, SEXP muSEXP, SEXP log_factorial_YSEXP, SEXP stepsSEXP, SEXP downSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< int >::type n1(n1SEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type mixing_weights_Y(mixing_weights_YSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type posterior_Y(posterior_YSEXP);
+    Rcpp::traits::input_parameter< double >::type psi(psiSEXP);
+    Rcpp::traits::input_parameter< double >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type log_factorial_Y(log_factorial_YSEXP);
+    Rcpp::traits::input_parameter< int >::type steps(stepsSEXP);
+    Rcpp::traits::input_parameter< double >::type down(downSEXP);
+    rcpp_result_gen = Rcpp::wrap(gradient_descent_mix_easy(Y, n1, mixing_weights_Y, posterior_Y, psi, mu, log_factorial_Y, steps, down));
+    return rcpp_result_gen;
+END_RCPP
+}
+// EM_discrete_mix_easy
+Rcpp::List EM_discrete_mix_easy(arma::vec Y, int steps, int iter, double down, double cutoff);
+RcppExport SEXP _VIPER_EM_discrete_mix_easy(SEXP YSEXP, SEXP stepsSEXP, SEXP iterSEXP, SEXP downSEXP, SEXP cutoffSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< int >::type steps(stepsSEXP);
+    Rcpp::traits::input_parameter< int >::type iter(iterSEXP);
+    Rcpp::traits::input_parameter< double >::type down(downSEXP);
+    Rcpp::traits::input_parameter< double >::type cutoff(cutoffSEXP);
+    rcpp_result_gen = Rcpp::wrap(EM_discrete_mix_easy(Y, steps, iter, down, cutoff));
+    return rcpp_result_gen;
+END_RCPP
+}
+// reweighting_sum_new_posterior_expectation_C
+arma::vec reweighting_sum_new_posterior_expectation_C(arma::mat Ymat, arma::mat Yflagmat, arma::mat Ycountmat, arma::vec Y, arma::vec Yflag, arma::vec prior_weight);
+RcppExport SEXP _VIPER_reweighting_sum_new_posterior_expectation_C(SEXP YmatSEXP, SEXP YflagmatSEXP, SEXP YcountmatSEXP, SEXP YSEXP, SEXP YflagSEXP, SEXP prior_weightSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< arma::mat >::type Ymat(YmatSEXP);
     Rcpp::traits::input_parameter< arma::mat >::type Yflagmat(YflagmatSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type Ycountmat(YcountmatSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type Y(YSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type Yflag(YflagSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type prior_weight(prior_weightSEXP);
-    Rcpp::traits::input_parameter< bool >::type ImputeAll(ImputeAllSEXP);
-    rcpp_result_gen = Rcpp::wrap(reweighting_sum_C(Ymat, Yflagmat, Y, Yflag, prior_weight, ImputeAll));
+    rcpp_result_gen = Rcpp::wrap(reweighting_sum_new_posterior_expectation_C(Ymat, Yflagmat, Ycountmat, Y, Yflag, prior_weight));
     return rcpp_result_gen;
 END_RCPP
 }
-// reweighting_C
-arma::vec reweighting_C(arma::mat Ymat, arma::mat Yflagmat, arma::vec Y, arma::vec Yflag);
-RcppExport SEXP VIPER_reweighting_C(SEXP YmatSEXP, SEXP YflagmatSEXP, SEXP YSEXP, SEXP YflagSEXP) {
+// reweighting_sum_new_posterior_expectation_simplified_C
+arma::vec reweighting_sum_new_posterior_expectation_simplified_C(arma::mat Ymat, arma::mat Yflagmat, arma::mat Ycountmat, arma::vec Y, arma::vec Yflag, arma::vec prior_weight);
+RcppExport SEXP _VIPER_reweighting_sum_new_posterior_expectation_simplified_C(SEXP YmatSEXP, SEXP YflagmatSEXP, SEXP YcountmatSEXP, SEXP YSEXP, SEXP YflagSEXP, SEXP prior_weightSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< arma::mat >::type Ymat(YmatSEXP);
     Rcpp::traits::input_parameter< arma::mat >::type Yflagmat(YflagmatSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type Ycountmat(YcountmatSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type Y(YSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type Yflag(YflagSEXP);
-    rcpp_result_gen = Rcpp::wrap(reweighting_C(Ymat, Yflagmat, Y, Yflag));
+    Rcpp::traits::input_parameter< arma::vec >::type prior_weight(prior_weightSEXP);
+    rcpp_result_gen = Rcpp::wrap(reweighting_sum_new_posterior_expectation_simplified_C(Ymat, Yflagmat, Ycountmat, Y, Yflag, prior_weight));
     return rcpp_result_gen;
 END_RCPP
 }
-// imputation_by_samples
-Rcpp::List imputation_by_samples(arma::mat data, arma::mat selected_logxx, arma::mat logxx, arma::mat zero_matrix, int n, int p, bool minbool, double alpha);
-RcppExport SEXP VIPER_imputation_by_samples(SEXP dataSEXP, SEXP selected_logxxSEXP, SEXP logxxSEXP, SEXP zero_matrixSEXP, SEXP nSEXP, SEXP pSEXP, SEXP minboolSEXP, SEXP alphaSEXP) {
+// imputation_by_samples_posterior_expectation
+Rcpp::List imputation_by_samples_posterior_expectation(arma::mat data, arma::mat selected_logxx, arma::mat logxx, arma::mat zero_matrix, arma::mat xx, int n, int p, bool minbool, double alpha);
+RcppExport SEXP _VIPER_imputation_by_samples_posterior_expectation(SEXP dataSEXP, SEXP selected_logxxSEXP, SEXP logxxSEXP, SEXP zero_matrixSEXP, SEXP xxSEXP, SEXP nSEXP, SEXP pSEXP, SEXP minboolSEXP, SEXP alphaSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -94,35 +271,18 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< arma::mat >::type selected_logxx(selected_logxxSEXP);
     Rcpp::traits::input_parameter< arma::mat >::type logxx(logxxSEXP);
     Rcpp::traits::input_parameter< arma::mat >::type zero_matrix(zero_matrixSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type xx(xxSEXP);
     Rcpp::traits::input_parameter< int >::type n(nSEXP);
     Rcpp::traits::input_parameter< int >::type p(pSEXP);
     Rcpp::traits::input_parameter< bool >::type minbool(minboolSEXP);
     Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
-    rcpp_result_gen = Rcpp::wrap(imputation_by_samples(data, selected_logxx, logxx, zero_matrix, n, p, minbool, alpha));
+    rcpp_result_gen = Rcpp::wrap(imputation_by_samples_posterior_expectation(data, selected_logxx, logxx, zero_matrix, xx, n, p, minbool, alpha));
     return rcpp_result_gen;
 END_RCPP
 }
-// replacing_by_expectation_C
-arma::vec replacing_by_expectation_C(arma::mat Ymat, arma::mat Yflagmat, arma::vec Y, arma::vec Yflag, arma::mat Ymat_sub, arma::mat Yflagmat_sub, arma::vec prior_weight, bool ImputeAll);
-RcppExport SEXP VIPER_replacing_by_expectation_C(SEXP YmatSEXP, SEXP YflagmatSEXP, SEXP YSEXP, SEXP YflagSEXP, SEXP Ymat_subSEXP, SEXP Yflagmat_subSEXP, SEXP prior_weightSEXP, SEXP ImputeAllSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type Ymat(YmatSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type Yflagmat(YflagmatSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type Y(YSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type Yflag(YflagSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type Ymat_sub(Ymat_subSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type Yflagmat_sub(Yflagmat_subSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type prior_weight(prior_weightSEXP);
-    Rcpp::traits::input_parameter< bool >::type ImputeAll(ImputeAllSEXP);
-    rcpp_result_gen = Rcpp::wrap(replacing_by_expectation_C(Ymat, Yflagmat, Y, Yflag, Ymat_sub, Yflagmat_sub, prior_weight, ImputeAll));
-    return rcpp_result_gen;
-END_RCPP
-}
-// imputation_by_samples_expectation
-Rcpp::List imputation_by_samples_expectation(arma::mat data, arma::mat selected_logxx, arma::mat logxx, arma::mat zero_matrix, int n, int p, bool minbool, double alpha);
-RcppExport SEXP VIPER_imputation_by_samples_expectation(SEXP dataSEXP, SEXP selected_logxxSEXP, SEXP logxxSEXP, SEXP zero_matrixSEXP, SEXP nSEXP, SEXP pSEXP, SEXP minboolSEXP, SEXP alphaSEXP) {
+// imputation_by_samples_posterior_expectation_simplified
+Rcpp::List imputation_by_samples_posterior_expectation_simplified(arma::mat data, arma::mat selected_logxx, arma::mat logxx, arma::mat zero_matrix, arma::mat xx, int n, int p, bool minbool, double alpha);
+RcppExport SEXP _VIPER_imputation_by_samples_posterior_expectation_simplified(SEXP dataSEXP, SEXP selected_logxxSEXP, SEXP logxxSEXP, SEXP zero_matrixSEXP, SEXP xxSEXP, SEXP nSEXP, SEXP pSEXP, SEXP minboolSEXP, SEXP alphaSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -130,25 +290,36 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< arma::mat >::type selected_logxx(selected_logxxSEXP);
     Rcpp::traits::input_parameter< arma::mat >::type logxx(logxxSEXP);
     Rcpp::traits::input_parameter< arma::mat >::type zero_matrix(zero_matrixSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type xx(xxSEXP);
     Rcpp::traits::input_parameter< int >::type n(nSEXP);
     Rcpp::traits::input_parameter< int >::type p(pSEXP);
     Rcpp::traits::input_parameter< bool >::type minbool(minboolSEXP);
     Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
-    rcpp_result_gen = Rcpp::wrap(imputation_by_samples_expectation(data, selected_logxx, logxx, zero_matrix, n, p, minbool, alpha));
+    rcpp_result_gen = Rcpp::wrap(imputation_by_samples_posterior_expectation_simplified(data, selected_logxx, logxx, zero_matrix, xx, n, p, minbool, alpha));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"VIPER_calculate_weights", (DL_FUNC) &VIPER_calculate_weights, 2},
-    {"VIPER_fitting_lasso", (DL_FUNC) &VIPER_fitting_lasso, 4},
-    {"VIPER_log_factorial", (DL_FUNC) &VIPER_log_factorial, 1},
-    {"VIPER_log_factorial_calculated", (DL_FUNC) &VIPER_log_factorial_calculated, 1},
-    {"VIPER_reweighting_sum_C", (DL_FUNC) &VIPER_reweighting_sum_C, 6},
-    {"VIPER_reweighting_C", (DL_FUNC) &VIPER_reweighting_C, 4},
-    {"VIPER_imputation_by_samples", (DL_FUNC) &VIPER_imputation_by_samples, 8},
-    {"VIPER_replacing_by_expectation_C", (DL_FUNC) &VIPER_replacing_by_expectation_C, 8},
-    {"VIPER_imputation_by_samples_expectation", (DL_FUNC) &VIPER_imputation_by_samples_expectation, 8},
+    {"_VIPER_calculate_weights", (DL_FUNC) &_VIPER_calculate_weights, 2},
+    {"_VIPER_fitting_lasso", (DL_FUNC) &_VIPER_fitting_lasso, 4},
+    {"_VIPER_log_factorial", (DL_FUNC) &_VIPER_log_factorial, 1},
+    {"_VIPER_log_factorial_calculated", (DL_FUNC) &_VIPER_log_factorial_calculated, 1},
+    {"_VIPER_alpha_optim", (DL_FUNC) &_VIPER_alpha_optim, 1},
+    {"_VIPER_log_poisson_likelihood_mix", (DL_FUNC) &_VIPER_log_poisson_likelihood_mix, 5},
+    {"_VIPER_gradient_all_mix", (DL_FUNC) &_VIPER_gradient_all_mix, 5},
+    {"_VIPER_gradient_all_combined_mix", (DL_FUNC) &_VIPER_gradient_all_combined_mix, 5},
+    {"_VIPER_test_stepsize_for_psi_mix", (DL_FUNC) &_VIPER_test_stepsize_for_psi_mix, 9},
+    {"_VIPER_test_stepsize_for_mu_mix", (DL_FUNC) &_VIPER_test_stepsize_for_mu_mix, 9},
+    {"_VIPER_gradient_descent_mix", (DL_FUNC) &_VIPER_gradient_descent_mix, 10},
+    {"_VIPER_take_exp_weight", (DL_FUNC) &_VIPER_take_exp_weight, 1},
+    {"_VIPER_EM_discrete_mix", (DL_FUNC) &_VIPER_EM_discrete_mix, 6},
+    {"_VIPER_gradient_descent_mix_easy", (DL_FUNC) &_VIPER_gradient_descent_mix_easy, 9},
+    {"_VIPER_EM_discrete_mix_easy", (DL_FUNC) &_VIPER_EM_discrete_mix_easy, 5},
+    {"_VIPER_reweighting_sum_new_posterior_expectation_C", (DL_FUNC) &_VIPER_reweighting_sum_new_posterior_expectation_C, 6},
+    {"_VIPER_reweighting_sum_new_posterior_expectation_simplified_C", (DL_FUNC) &_VIPER_reweighting_sum_new_posterior_expectation_simplified_C, 6},
+    {"_VIPER_imputation_by_samples_posterior_expectation", (DL_FUNC) &_VIPER_imputation_by_samples_posterior_expectation, 9},
+    {"_VIPER_imputation_by_samples_posterior_expectation_simplified", (DL_FUNC) &_VIPER_imputation_by_samples_posterior_expectation_simplified, 9},
     {NULL, NULL, 0}
 };
 
