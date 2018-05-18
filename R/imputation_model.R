@@ -16,8 +16,8 @@
 #' @param minbool: The criteria used to select the penalty level\code{lambda} in the penalized regression model. VIPER calls \code{cv.glmnet()} in \bold{glmnet} to perform fitting cross validation.
 #' Two penalty levels are available for selection: \code{lambda.min}, the value of \code{lambda} that gives minimum mean cross-validated error, and \code{lambda.1se}, the value of \code{lambda}
 #' that gives the most regularized model such that error is within one standard error of the minimum. The default is \code{lambda.1se}, i.e., \code{minbool = FALSE}.
-#' @param alpha: The elastic net mixing parameter. The default value is 1, which is equivalent to a lasso model.
-#' @param report: Whether to save imputed data matrix in CSV files. The default value is FALSE.
+#' @param alpha: The elastic net mixing parameter. The default value is 0.5. Setting alpha = 1 is equivalent to a lasso model.
+#' @param report: Whether to save imputed data matrix in CSV files. The default value is TRUE.
 #' @param outdir: The directory to save the output.
 #' @param prefix: prefix of the result files.
 #' @return A list of imputed data matrices and summary.
@@ -28,7 +28,8 @@
 #' The zero values in these cells are not imputed.
 
 VIPER <- function(gene.expression, num = 5000, percentage.cutoff = 0.1, minbool = FALSE,
-                  alpha = 0.5, report = FALSE, outdir = NULL, prefix = NULL){
+                  alpha = 0.5, report = TRUE, outdir = NULL, prefix = NULL, selection = c("EM_expectation", "simplified_expectation")){
+
 
   xx <- gene.expression # p*n
   p <- nrow(xx)
@@ -37,17 +38,29 @@ VIPER <- function(gene.expression, num = 5000, percentage.cutoff = 0.1, minbool 
   zero.rate <- apply(xx, 1, function(x){length(x[x == 0])})/n
   flag <-  zero.rate <= percentage.cutoff
 
+  len <- length(flag[flag==TRUE])
+  while(len < 500){
+    percentage.cutoff <- percentage.cutoff + 0.05
+    flag <-  zero.rate <= percentage.cutoff
+    len <- length(flag[flag==TRUE])
+  }
+  if(percentage.cutoff >= 0.25)
+    warnings('The prediction model may not be accurate since there are not enough genes that have low zero rates.')
+
   logxx <- apply(xx, 2, function(y){log(y + 0.1)})
   data <- logxx[round(runif(num)*p), ]
   zero.matrix <- xx != 0
   zero.matrix <- apply(zero.matrix, 2, as.numeric)
   selected_logxx <- logxx[flag, ]
+  xx <- as.matrix(xx)
 
-#  if(expectation == TRUE){
-#  res_imp <- imputation_by_samples_expectation(data, selected_logxx, logxx, zero.matrix, n, p, minbool, alpha)
-#  } else {
-    res_imp <- imputation_by_samples(data, selected_logxx, logxx, zero.matrix, n, p, minbool, alpha)
-#  }
+  selection <- match.arg(selection)
+  if(selection == "EM_expectation"){
+    res_imp <- imputation_by_samples_posterior_expectation(data, selected_logxx, logxx, zero.matrix, xx, n, p, minbool, alpha)
+  }
+  if(selection == "simplified_expectation"){
+    res_imp <- imputation_by_samples_posterior_expectation_simplified(data, selected_logxx, logxx, zero.matrix, xx, n, p, minbool, alpha)
+  }
 
   outlier_flag <- apply(res_imp$sample_weights, 1, function(x){any(x==-1)})
   outliers <- c(1:n)[outlier_flag]
@@ -62,11 +75,22 @@ VIPER <- function(gene.expression, num = 5000, percentage.cutoff = 0.1, minbool 
 
   res <- list(imputed = imputed_counts, imputed_log = nopredict,
               sample_weights = res_imp$sample_weights, outliers = outliers)
-  write.table(imputed_counts, file = paste0(outdir, "/", prefix, "imputed_counts.csv"))
-  write.table(res$imputed_log, file = paste0(outdir, "/", prefix, "imputed_logvalue.csv"))
-  write.table(res$sample_weights, file = paste0(outdir, "/", prefix, "sample_weights.csv"))
-  write.table(res$outliers, file = paste0(outdir, "/", prefix, "outliers.csv"))
+
+  if(report == TRUE){
+    write.table(imputed_counts, file = paste0(outdir, "/", prefix, "imputed_counts.csv"))
+    write.table(res$imputed_log, file = paste0(outdir, "/", prefix, "imputed_logvalue.csv"))
+    write.table(res$sample_weights, file = paste0(outdir, "/", prefix, "sample_weights.csv"))
+    write.table(res$outliers, file = paste0(outdir, "/", prefix, "outliers.csv"))
+    if(is.null(outdir)){
+      message(paste0("Imputation results have been saved at: ", getwd()))
+    } else {
+      message(paste0("Imputation results have been saved at: ", outdir))
+    }
+
+  }
 
   return(res)
 }
+
+
 
