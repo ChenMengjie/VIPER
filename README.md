@@ -52,6 +52,11 @@ Paramter **prefix** sets the prefix of the result files.
 **outliers**: The indexes of cells that have no selected candidate neighbors according to the penalized regression model. The zero values in these cells are not imputed.
 
 
+### Tutorial
+
+A tutorial with examples illustrating the usage of **VIPER** is available at:  
+
+https://github.com/ChenMengjie/VIPER/blob/master/VIPERUserguide.pdf
 
 
 ### Contact
