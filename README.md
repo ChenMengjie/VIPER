@@ -59,6 +59,18 @@ A tutorial with examples illustrating the usage of **VIPER** is available at:
 https://github.com/ChenMengjie/VIPER/blob/master/VIPERUserguide.pdf
 
 
+### A note on 10X or Drop-seq data 
+
+We have primarily focused on illustrating our method on selecting neighborhood cells for imputation. However, we acknowledge that all data examined in the manuscript contain a smaller number of cells than the number of genes. The accuracy of gene based imputation is likely dependent on the number of cells and will likely improve with increasing cell number. In contrast, the accuracy of cell based imputation is likely dependent on the number of genes. Subsequently, using genes to perform imputation may have added benefits for larger scRNAseq data where the number of cells exceeds the number of genes. We tested VIPER on several low coverage 10X and Drop-seq data, and we found gene-to-gene imputation could be better than cell-to-cell. To test this on a new dataset, you can perform the 2.1 analysis shown here: https://github.com/ChenMengjie/VIPER/blob/master/VIPERUserguide.pdf (with GeneNum=200, ZeroRate=0.7) to check which way is better. If gene-to-gene predictions obtain better R squares, we recommend to transpose the gene expression as input shown as follows: 
+ 
+  ```R
+  library(VIPER)
+  data(grun)
+  res <- VIPER(t(gene.expression), num = 1000, percentage.cutoff = 0.5, minbool = FALSE, alpha = 0.5, 
+  report = FALSE, outdir = NULL, prefix = NULL)
+  ```
+
+
 ### Contact
 
 **Mengjie Chen** (UChicago) mengjiechen@uchicago.edu
