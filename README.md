@@ -57,6 +57,7 @@ Paramter **prefix** sets the prefix of the result files.
 A tutorial with examples illustrating the usage of **VIPER** is available at:  
 
 https://github.com/ChenMengjie/VIPER/blob/master/VIPERUserguide.pdf
+<<<<<<< HEAD
 
 
 ### A note on 10X or Drop-seq data 
@@ -69,6 +70,8 @@ We have primarily focused on illustrating our method on selecting neighborhood c
   res <- VIPER(t(gene.expression), num = 1000, percentage.cutoff = 0.5, minbool = FALSE, alpha = 0.5, 
   report = FALSE, outdir = NULL, prefix = NULL)
   ```
+=======
+>>>>>>> c154a4e79ed074da85c122a7548e03619fdca99c
 
 
 ### Contact
