@@ -66,7 +66,6 @@ We have primarily focused on illustrating our method on selecting neighborhood c
  
   ```R
   library(VIPER)
-  data(grun)
   res <- VIPER(t(gene.expression), num = 1000, percentage.cutoff = 0.5, minbool = FALSE, alpha = 0.5, 
   report = FALSE, outdir = NULL, prefix = NULL)
   ```
