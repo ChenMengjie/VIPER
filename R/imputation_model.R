@@ -39,7 +39,7 @@ VIPER <- function(gene.expression, num = 5000, percentage.cutoff = 0.1, minbool 
   flag <-  zero.rate <= percentage.cutoff
 
   len <- length(flag[flag==TRUE])
-  while(len < 500){
+  while(len < 500 & p > 500){
     percentage.cutoff <- percentage.cutoff + 0.05
     flag <-  zero.rate <= percentage.cutoff
     len <- length(flag[flag==TRUE])
